@@ -1,37 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+  <!-- Meta tags and stylesheets -->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Age calculator app</title>
-
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,700;0,800;1,400&family=Roboto:wght@400;500;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>Age Calculator</title>
 </head>
+
 <body>
+  <main>
+    <section class="age-container">
+      <!-- Form for input -->
+      <form action="" method="post" class="age-form">
+        <div>
+          <label for="day">Day</label>
+          <input type="text" placeholder="dd" name="day" id="day">
+          <p class="error"></p>
+        </div>
+        <div>
+          <label for="month">Month</label>
+          <input type="text" placeholder="mm" name="month" id="month">
+          <p class="error"></p>
+        </div>
+        <div>
+          <label for="year">Year</label>
+          <input type="text" placeholder="yyyy" name="year" id="year">
+          <p class="error"></p>
+        </div>
+      </form>
 
-  Day
-  DD
+      <!-- Container for image and borders -->
+      <div class="img-container">
+        <div class="image-border"></div> 
+        <button id="submit" aria-label="Name"> <img src="./assets/images/icon-arrow.svg" alt=""/></button>
+        <div class="image-border-two"></div>
+      </div>
+      <!--- Container output -->
+      <div class="output-container">
+        <!-- Output content will go here -->
+        <div class="result-view">
+          <span>--</span> years
+        </div>
+        <div class="result-view">
+          <span>--</span> Months
+        </div>
+        <div class="result-view">
+          <span>--</span> Days
+        </div>
+      </div>
+    </section>
 
-  Month
-  MM
-
-  Year
-  YYYY
-
-  -- years
-  -- months
-  -- days
-  
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
+    <!-- Output container -->
+   
+  </main>
+  <script src="./main.js"></script>
 </body>
+
 </html>
