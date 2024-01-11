@@ -19,122 +19,94 @@ document.addEventListener("DOMContentLoaded", () => {
         "Must be a valid Month",
         "Must be a valid Day",
     ];
-    const errorState = (numberOfError,typeOfDate, typeOfError, color) => {
-        error[numberOfError].innerHTML = typeOfError;
+
+    const errorState = (numberOfError, typeOfDate, typeOfErrorMessage, color) => {
+        error[numberOfError].innerHTML = typeOfErrorMessage;
         labels[numberOfError].style.color = color;
         typeOfDate.style.color = color;
-    }
-    const isLeapYear = (day, month, year) => {
-        month = month - 1;
-        fullDate = new Date(year, month, day);
-        if (day == fullDate.getDate() && month == fullDate.getMonth() && year == fullDate.getFullYear()) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    const subtractAge = () => {
-        let newYear = Math.abs(currentYear - year.value);
-    newMonth = 0;
-    if (currentMonth >= month.value) {
-        newMonth = currentMonth - month.value;
-    } else {
-        newMonth = month.value - currentMonth;
-        newYear--; 
-    }
-        let newDay = 0;
-        if (currentDay >= day.value) {
-            newDay = currentDay - day.value;
-        }
-        else { 
-            if (isLeapYear(day.value, month.value, year.value)) { 
-                newDay= 30 + currentDay - day.value;
-            }
-            else {
-                newDay = currentDay - day.value;
-            }
+    };
 
-            if (newMonth < 0) {
-                newMonth = 11;
-                newYear--;
-            }
-            if (newMonth < currentMonth) {
-                newDay++;
-            }
-        }
-        spans[0].innerHTML = newYear;
-        spans[1].innerHTML = newMonth;
-        spans[2].innerHTML = newDay;
+    const isLeapYear = (year) => {
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    };
 
-    }
     const isDayCorrect = () => {
-        if (day.value == "") {
-            errorState(0, day, typeOfError[1], "#ff5757");
+        const dayValue = parseInt(day.value);
+
+        if (isNaN(dayValue) || dayValue < 1 || dayValue > 31) {
+            errorState(0, day, typeOfError[5], "#ff5757");  // Updated error type for day range
             return false;
-        }
-        else if (day.value <= 0 || day.value > 31) {
-            errorState(0, day, typeOfError[2], "#ff5757")
-        }
-        else if (isLeapYear(day.value, month.value, year.value) == false) { 
-            errorState(0, day, typeOfError[5], "#ff5757")
-        }
-        else {
-            errorState(0, day, typeOfError[0], "");
+        } else if (month.value == 2 && dayValue > 29) {
+            errorState(0, day, typeOfError[5], "#ff5757");  // Leap year error for February
+            return false;
+        } else if (month.value != 2 && !isLeapYear(year.value) && dayValue > 28) {
+            errorState(0, day, typeOfError[5], "#ff5757");  // Non-leap year error for other months
+            return false;
+        } else {
+            errorState(0, day, typeOfError[0], "");  // No error
             return true;
         }
-    }
+    };
+
     const isMonthCorrect = () => {
         if (month.value == "") {
             errorState(1, month, typeOfError[1], "#ff5757");
             return false;
-        }
-        else if (month.value <= 0 || month.value > 12) {
-            errorState(1, month, typeOfError[3], "#ff5757");
+        } else if (month.value < 1 || month.value > 12) {
+            errorState(1, month, typeOfError[4], "#ff5757");
             return false;
+        } else if (month.value != 2 && !isLeapYear(year.value) && day.value > 28) {
+            errorState(0, day, typeOfError[5], "#ff5757");  // Non-leap year error for other months
+            return false;
+        } else {
+            errorState(1, month, typeOfError[0], "");
+            return true;
         }
-        else if (isLeapYear(month.value, day.value, year.value)) { 
-            errorState(1, month, typeOfError[0], "#ff5757");
-        }
-        else {
-            errorState(1, month, typeOfError[0], "")
-                return true;
-            }
+    };
 
-            
-    }
     const isYearCorrect = () => {
         if (year.value == "") {
             errorState(2, year, typeOfError[1], "#ff5757");
             return false;
-        }
-        else if (year.value > currentYear) {
+        } else if (year.value > currentYear) {
             errorState(2, year, typeOfError[4], "#ff5757");
             return false;
-        }
-        else if (isLeapYear(month.value, day.value, year.value)) {
-            errorState(2, year, typeOfError[0], "#ff5757");
-        }
-        else if (year.value == currentYear && month.value > currentMonth) { 
-            errorState(1, month, typeOfError[3], "#ff5757");
+        } else if (year.value == currentYear && month.value > currentMonth) {
+            errorState(1, month, typeOfError[4], "#ff5757");
             return false;
-        }
-        else if (year.value == currentYear && month.value == currentMonth && day.value > currentDay) { 
-            errorState(0, day, typeOfError[0], "#ff5757");
+        } else if (year.value == currentYear && month.value == currentMonth && day.value > currentDay) {
+            errorState(0, day, typeOfError[5], "#ff5757");  // Updated error type for day range
             return false;
-        }
-        else {
+        } else {
             errorState(2, year, typeOfError[0], "");
             return true;
         }
-    }
+    };
+
+    const subtractAge = () => {
+        let newYear = currentYear - year.value;
+        let newMonth = currentMonth - month.value;
+        let newDay = currentDay - day.value;
+    
+        if (newDay < 0) {
+            newMonth--;
+            const daysInPreviousMonth = new Date(year.value, currentMonth, 0).getDate();
+            newDay += daysInPreviousMonth;
+        }
+    
+        if (newMonth < 0) {
+            newYear--;
+            newMonth += 12;
+        }
+    
+        spans[0].innerHTML = newYear;
+        spans[1].innerHTML = newMonth + 1; // Adjust for one-indexed month
+        spans[2].innerHTML = newDay;
+    };
+    
     submitButton.addEventListener("click", () => {
-        isDayCorrect();
-        isMonthCorrect();
-        isYearCorrect();
         if (isDayCorrect() && isMonthCorrect() && isYearCorrect()) {
             subtractAge();
         }
-    })
-   
-})
+    });
+});
