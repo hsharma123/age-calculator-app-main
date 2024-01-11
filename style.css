@@ -61,7 +61,7 @@ img{
     border: 1px solid var(--light-grey);
     border-radius: 5px;
     text-transform: uppercase;
-    color: var(--light-grey);
+    color: var(--off-black);
 }
 .age-form input:focus, .age-form input:focus-visible{
     border: 1px solid var(--smokey-grey) !important;
